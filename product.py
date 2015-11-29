@@ -16,6 +16,8 @@ class Product:
         Config = pool.get('product.configuration')
         Sequence = pool.get('ir.sequence')
         config = Config(1)
+        if not config.ean13_sequence:
+            return
         sequence = config.ean13_sequence.id
         ean = Sequence.get_id(sequence)
         checksum = 0
@@ -36,19 +38,23 @@ class Product:
                                 skip = True
                                 break
                         else:
-                            codes.append({
-                                    'barcode': 'EAN13',
-                                    'number': cls.get_new_ean13(),
-                                    'active': True,
-                                    })
-                            skip = True
+                            number = cls.get_new_ean13()
+                            if number:
+                                codes.append({
+                                        'barcode': 'EAN13',
+                                        'number': number,
+                                        'active': True,
+                                        })
+                                skip = True
                             break
             if not skip:
-                values['codes'] = [
-                    ('create', [{
-                                'barcode': 'EAN13',
-                                'number': cls.get_new_ean13(),
-                                'active': True,
-                                }]),
-                    ]
+                number = cls.get_new_ean13()
+                if number:
+                    values['codes'] = [
+                        ('create', [{
+                                    'barcode': 'EAN13',
+                                    'number': number,
+                                    'active': True,
+                                    }]),
+                        ]
         return super(Product, cls).create(vlist)
