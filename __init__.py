@@ -2,11 +2,12 @@
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
 from trytond.pool import Pool
-from .configuration import *
-from .product import *
+from . import configuration
+from . import product
+
 
 def register():
     Pool.register(
-        Configuration,
-        Product,
+        configuration.Configuration,
+        product.Product,
         module='product_ean13_sequence', type_='model')

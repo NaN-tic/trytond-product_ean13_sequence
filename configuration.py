@@ -7,8 +7,7 @@ from trytond.pool import PoolMeta
 __all__ = ['Configuration']
 
 
-class Configuration:
-    __metaclass__ = PoolMeta
+class Configuration(metaclass=PoolMeta):
     __name__ = 'product.configuration'
     ean13_sequence = fields.Many2One('ir.sequence',
         'EAN13 Sequence', required=True,
